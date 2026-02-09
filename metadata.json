@@ -1,0 +1,8 @@
+{
+  "name": "FastResume Demo - Jane Zhang",
+  "description": "An AI-powered tool to tailor your resume to specific job descriptions, offering analysis, scoring, and ATS-friendly formatting.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}

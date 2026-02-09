@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Fast Resume</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&family=Dancing+Script:wght@600&family=Inter:wght@400;700;900&family=Lora:ital,wght@0,400..700;1,400..700&family=Merriweather:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+    <!-- PDF.js for in-app PDF viewing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+      window.onload = function() {
+        if (window.pdfjsLib) {
+          window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        }
+      };
+    </script>
+    <style>
+      /* Custom CSS variables for dynamic themes */
+      :root {
+        --theme-primary-color: #4f46e5; /* Default indigo */
+        --resume-margin: 15mm;
+        --resume-font-size: 10pt;
+        --resume-line-height: 1.4;
+        --resume-name-size: 28pt;
+        --resume-header-size: 11pt;
+      }
+
+      * { box-sizing: border-box; }
+      
+      body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: #f1f5f9;
+        margin: 0;
+        color: #0f172a;
+      }
+      
+      html { scroll-behavior: smooth; }
+
+      .glass-header {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+
+      /* 核心：真实的物理分页布局 */
+      .a4-desk {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 40px; /* 页与页之间的物理间隙 */
+        padding: 40px 0;
+      }
+
+      .a4-page {
+        width: 210mm;
+        height: 297mm;
+        background: #ffffff !important; /* Force solid white background */
+        box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        position: relative;
+        overflow: hidden; /* 关键：每页只显示自己的部分 */
+        transition: all 0.4s ease;
+      }
+
+      /* 打印优化 */
+      @media print {
+        body { background: none; }
+        .no-print { display: none !important; }
+        .a4-desk { gap: 0; padding: 0; }
+        .a4-page { 
+            box-shadow: none !important; 
+            margin: 0 !important;
+            page-break-after: always;
+            overflow: hidden;
+            position: relative; /* Ensure position for page-break-inside */
+            transform: scale(1) !important;
+        }
+        .a4-page:last-child {
+            page-break-after: avoid;
+        }
+        @page { size: A4; margin: 0; }
+      }
+
+      /* PDF Export Specific Hacks to ensure content visibility and no blank pages */
+      body.exporting-pdf {
+          background: white !important;
+      }
+      body.exporting-pdf .a4-desk {
+          padding: 0 !important;
+          margin: 0 !important;
+          gap: 0 !important;
+          display: block !important;
+          transform: none !important;
+          height: auto !important;
+      }
+      body.exporting-pdf .a4-page {
+          box-shadow: none !important;
+          border: none !important;
+          margin: 0 !important;
+          transform: none !important;
+          background: white !important;
+          page-break-after: always !important;
+          display: block !important;
+      }
+      body.exporting-pdf .a4-page:last-child {
+          page-break-after: avoid !important;
+      }
+
+      .section-block {
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+
+      .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+      .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+      .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.33.0"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
